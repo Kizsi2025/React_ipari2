@@ -1,5 +1,11 @@
-import './App.css';
-const { useState, useEffect, useContext, createContext } = React;
+import './components/App.css';
+// App.js (vagy bármely komponensfájl, ahol használod)
+import React, { createContext, useState, useContext } from 'react';
+
+
+function App() {
+  const [user, setUser] = useState(null);
+  const [currentSession, setCurrentSession] = useState('auth');
 
 // Context létrehozása
 const AppContext = createContext();
@@ -13,7 +19,7 @@ const initialData = {
       description: "A mesterséges intelligencia alapvető fogalmai és működési elvei",
       locked: false,
       content: {
-        intro: "A mesterséges intelligencia egy olyan technológiai terület, amely a gépek „gondolkodási" képességeinek fejlesztésére irányul.",
+        intro: "A mesterséges intelligencia egy olyan technológiai terület, amely a gépek \"gondolkodási\" képességeinek fejlesztésére irányul.",
         dataTypes: [
           {
             name: "Strukturált adatok",
@@ -646,34 +652,41 @@ function App() {
     );
   }
 
-  return (
-    <AppContext.Provider value={{ user, modules }}>
-      <div className="app">
-        <Header 
-          user={user} 
-          onAuthClick={() => setShowAuth(true)}
-          onLogout={handleLogout}
-        />
-        
-        <SessionManager 
-          modules={modules}
-          completedModules={user.completedModules}
-          onModuleSelect={handleModuleSelect}
-          selectedModule={selectedModule}
-        />
-        
-        <Footer />
-        
-        {showAuth && (
-          <Auth 
-            onLogin={handleLogin} 
-            onClose={() => setShowAuth(false)} 
-          />
-        )}
-      </div>
-    </AppContext.Provider>
+    return (
+    <div className="App">
+      <header>
+        <h1>MI Tananyag</h1>
+        <div className="header-controls">
+          {user ? (
+            <>
+              <div className="ip-counter">
+                Pontszám: <span id="ip-count">0</span> IP
+              </div>
+              <span id="user-name">{user}</span>
+              <button 
+                id="logout-btn" 
+                onClick={() => setUser(null)}
+              >
+                Kilépés
+              </button>
+            </>
+          ) : (
+            <button 
+              id="login-header-btn"
+              onClick={() => setCurrentSession('auth')}
+            >
+              Bejelentkezés
+            </button>
+          )}
+        </div>
+      </header>
+      {/* További komponensek... */}
+    </div>
   );
 }
+}
+
 
 // Alkalmazás renderelése
 ReactDOM.render(<App />, document.getElementById('root'));
+export default App;
